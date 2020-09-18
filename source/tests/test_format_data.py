@@ -85,3 +85,27 @@ class TestFormatData(unittest.TestCase):
                 }
             ),
         )
+
+    def test_daily_totals(self):
+        df = pd.DataFrame(
+            {
+                "SPA": ["SPA 1", "SPA 2", "Overall Totals:"],
+                "Total Rooms": ["10", "15", "25"],
+                "# Operational": ["10", "15", "25"],
+                "# of Rooms Occupied": ["6", "8", "14"],
+                "# of Clients": ["11", "9", "20"],
+            }
+        )
+
+        daily_totals = format_data.DailyTotals(df)
+
+        # Constant
+        self.assertEqual(daily_totals.unsheltered_people, "48,038")
+        # Constant
+        self.assertEqual(daily_totals.rooms_promised, "15,000")
+        # Total rooms
+        self.assertEqual(daily_totals.rooms_under_contract, "25")
+        # Total # operational
+        self.assertEqual(daily_totals.rooms_operational, "25")
+        # Total # of rooms occupied
+        self.assertEqual(daily_totals.rooms_occupied, "14")

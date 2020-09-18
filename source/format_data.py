@@ -44,3 +44,12 @@ def format_data(all_tables):
     format_spa(df)
 
     return df
+
+
+class DailyTotals:
+    def __init__(self, df):
+        self.unsheltered_people = "48,038"
+        self.rooms_promised = "15,000"
+        self.rooms_under_contract = df.iloc[-1]["Total Rooms"]
+        self.rooms_operational = df.iloc[-1]["# Operational"]
+        self.rooms_occupied = df.iloc[-1]["# of Rooms Occupied"]

@@ -3,7 +3,7 @@ import pandas as pd
 import pdfplumber
 
 from .exceptions import ScrapeError
-from .format_data import format_data
+from .format_data import format_data, DailyTotals
 
 MAX_Y = 792
 
@@ -123,6 +123,16 @@ def parse_pdf(filename):
         df = format_data(all_tables)
 
         return df
+
+
+def get_daily_totals(filename):
+    # Uncomment to bypass parsing pdf and test quickly with saved data
+    # csv_filename = "8.21.20_COVID-19_Update_FINAL.csv"
+    # df = read_csv(csv_filename)
+
+    df = parse_pdf(filename)
+
+    return DailyTotals(df)
 
 
 def main():

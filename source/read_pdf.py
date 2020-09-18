@@ -102,7 +102,7 @@ def to_csv(df, filename):
 
 
 # Convert Project Roomkey PDF data to df
-def parse_pdf(filename):
+def parse_pdf(filename, debug=False):
     with pdfplumber.open(filename) as pdf:
         start_page, end_page = get_start_and_end_pages(pdf)
         start_page_number = start_page.page_number
@@ -117,7 +117,10 @@ def parse_pdf(filename):
             table_coords = get_table_coords(
                 page_number, coords, start_page_number, end_page_number
             )
-            save_table_img(page, table_coords, filename)
+
+            if debug:
+                save_table_img(page, table_coords, filename)
+
             all_tables.append(parse_table(page_number, table_coords, filename))
 
         df = format_data(all_tables)
@@ -125,12 +128,15 @@ def parse_pdf(filename):
         return df
 
 
-def get_daily_totals(filename):
+def get_daily_totals(filename, debug=False):
     # Uncomment to bypass parsing pdf and test quickly with saved data
     # csv_filename = "8.21.20_COVID-19_Update_FINAL.csv"
     # df = read_csv(csv_filename)
 
-    df = parse_pdf(filename)
+    df = parse_pdf(filename, debug)
+
+    if debug:
+        to_csv(df, filename)
 
     return DailyTotals(df)
 

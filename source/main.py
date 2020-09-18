@@ -1,16 +1,17 @@
 from dotenv import load_dotenv
 from pandas import read_csv
 
-from .twitter import send_daily_totals_tweet
-from .read_pdf import get_daily_totals
-from .format_data import DailyTotals
+from source.twitter import send_daily_totals_tweet
+from source.read_pdf import get_daily_totals
+from source.format_data import DailyTotals
+from source.scrape_roomkey import save_latest_incident_update_from_project_roomkey_site
 
 
 def main():
-    filename = "9.17.20_COVID-19_Update_FINAL.pdf"
     load_dotenv()
 
-    daily_totals = get_daily_totals(filename)
+    pdf_filename = save_latest_incident_update_from_project_roomkey_site()
+    daily_totals = get_daily_totals(pdf_filename)
     send_daily_totals_tweet(daily_totals)
 
 

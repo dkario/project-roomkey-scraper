@@ -139,14 +139,3 @@ def get_daily_totals(filename, debug=False):
         to_csv(df, filename)
 
     return DailyTotals(df)
-
-
-def main():
-    filename = "8.21.20_COVID-19_Update_FINAL.pdf"
-
-    df = parse_pdf(filename)
-    to_csv(df, filename)
-
-
-if __name__ == "__main__":
-    main()

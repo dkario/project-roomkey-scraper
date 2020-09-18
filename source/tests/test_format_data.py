@@ -61,6 +61,7 @@ class TestFormatData(unittest.TestCase):
 
     def test_trim_cols(self):
         df = pd.DataFrame(
+            # pylint: disable=duplicate-key
             {
                 "": [""],
                 "Service Planning Area (SPA)": ["SPA 1 – Antelope Valley (#1)"],

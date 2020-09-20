@@ -1,0 +1,9 @@
+{
+  "name": "project-roomkey-scraper",
+  "version": "1.0.0",
+  "author": "Dylan Kario",
+  "license": "ISC",
+  "dependencies": {
+    "serverless-python-requirements": "^5.1.0"
+  }
+}

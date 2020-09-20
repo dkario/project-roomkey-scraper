@@ -1,7 +1,10 @@
 __pycache__
-.env
 .DS_Store
+.env
+.serverless
 .vscode
+node_modules
+venv
 *.csv
 *.pdf
 *.png

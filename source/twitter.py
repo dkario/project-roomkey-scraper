@@ -4,8 +4,12 @@ from datetime import date
 
 
 def get_api():
-    auth = tweepy.OAuthHandler(os.getenv("API_KEY"), os.getenv("API_SECRET"))
-    auth.set_access_token(os.getenv("ACCESS_TOKEN"), os.getenv("ACCESS_TOKEN_SECRET"))
+    auth = tweepy.OAuthHandler(
+        os.getenv("TWITTER_API_KEY"), os.getenv("TWITTER_API_SECRET")
+    )
+    auth.set_access_token(
+        os.getenv("TWITTER_ACCESS_TOKEN"), os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
+    )
     api = tweepy.API(auth)
     api.verify_credentials()
 

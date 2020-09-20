@@ -3,7 +3,7 @@ import pandas as pd
 import pdfplumber
 
 from .exceptions import ScrapeError
-from .format_data import format_data, DailyTotals
+from .format_data import format_data, get_daily_totals_from_df
 
 MAX_Y = 792
 
@@ -138,4 +138,4 @@ def get_daily_totals(filename, debug=False):
     if debug:
         to_csv(df, filename)
 
-    return DailyTotals(df)
+    return get_daily_totals_from_df(df)

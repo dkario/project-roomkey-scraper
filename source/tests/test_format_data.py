@@ -87,7 +87,7 @@ class TestFormatData(unittest.TestCase):
             ),
         )
 
-    def test_daily_totals(self):
+    def test_get_daily_totals_from_df(self):
         df = pd.DataFrame(
             {
                 "SPA": ["SPA 1", "SPA 2", "Overall Totals:"],
@@ -98,7 +98,7 @@ class TestFormatData(unittest.TestCase):
             }
         )
 
-        daily_totals = format_data.DailyTotals(df)
+        daily_totals = format_data.get_daily_totals_from_df(df)
 
         # Constant
         self.assertEqual(daily_totals.unsheltered_people, "48,038")

@@ -1,4 +1,5 @@
 import pandas as pd
+from .daily_totals import DailyTotals
 
 
 # Reformat SPA col cells: "SPA 1 – Antelope Valley (#1)" -> "Antelope Valley - 1"
@@ -46,10 +47,9 @@ def format_data(all_tables):
     return df
 
 
-class DailyTotals:
-    def __init__(self, df):
-        self.unsheltered_people = "48,038"
-        self.rooms_promised = "15,000"
-        self.rooms_under_contract = df.iloc[-1]["Total Rooms"]
-        self.rooms_operational = df.iloc[-1]["# Operational"]
-        self.rooms_occupied = df.iloc[-1]["# of Rooms Occupied"]
+def get_daily_totals_from_df(df):
+    rooms_under_contract = df.iloc[-1]["Total Rooms"]
+    rooms_operational = df.iloc[-1]["# Operational"]
+    rooms_occupied = df.iloc[-1]["# of Rooms Occupied"]
+
+    return DailyTotals(rooms_under_contract, rooms_operational, rooms_occupied)

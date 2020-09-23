@@ -13,10 +13,6 @@ provider:
         TWITTER_ACCESS_TOKEN: ${ssm:/TWITTER_ACCESS_TOKEN~true}
         TWITTER_ACCESS_TOKEN_SECRET: ${ssm:/TWITTER_ACCESS_TOKEN_SECRET~true}
 
-# layers:
-#     ghostscript:
-#         path: "/opt/bin/gs"
-
 package:
     include:
         - ./source
@@ -25,7 +21,7 @@ package:
         - "*.pdf"
         - "*.ipynb"
         - node_modules/**
-        - source/tests/**
+        - source/table_parser/**
         - venv/**
 
 functions:
@@ -33,8 +29,6 @@ functions:
         handler: handler.run
         events:
             - schedule: cron(0 20 ? * MON-FRI *)
-        # layers:
-        #     - arn:aws:lambda:us-west-1:764866452798:layer:ghostscript:8
 
 plugins:
     - serverless-python-requirements

@@ -1,5 +1,5 @@
 import pandas as pd
-from .daily_totals import DailyTotals
+from source.daily_totals import DailyTotals
 
 
 # Reformat SPA col cells: "SPA 1 – Antelope Valley (#1)" -> "Antelope Valley - 1"

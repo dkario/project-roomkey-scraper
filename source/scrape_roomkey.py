@@ -30,4 +30,4 @@ def save_latest_incident_update_from_project_roomkey_site():
     with open(filename, "wb") as f:
         f.write(r.content)
 
-    return filename
+    return (filename, link)

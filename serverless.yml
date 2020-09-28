@@ -7,6 +7,7 @@ provider:
     name: aws
     stage: prod
     runtime: python3.8
+    timeout: 30
     region: us-west-1
     environment:
         TMP: /tmp
@@ -21,7 +22,9 @@ package:
     exclude:
         - "*.csv"
         - "*.pdf"
+        - "*.png"
         - "*.ipynb"
+        - "package*.json"
         - node_modules/**
         - source/table_parser/**
         - tmp/**
@@ -32,10 +35,12 @@ functions:
         handler: handler.run
         events:
             - schedule: cron(0 3 ? * TUE-SAT *)
+        layers:
+            - { Ref: PythonRequirementsLambdaLayer }
 
 plugins:
     - serverless-python-requirements
 
 custom:
     pythonRequirements:
-        dockerizePip: non-linux
+        layer: true

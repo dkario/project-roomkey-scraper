@@ -5,6 +5,7 @@ __pycache__
 .vscode
 node_modules
 venv
+tmp
 *.csv
 *.pdf
 *.png

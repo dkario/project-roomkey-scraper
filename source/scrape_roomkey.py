@@ -1,3 +1,4 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 
@@ -16,8 +17,14 @@ def parse_latest_incident_link():
 
 
 def save_latest_incident_update_from_project_roomkey_site():
+    tmp = os.getenv("TMP")
+
+    if not os.path.exists(tmp):
+        os.makedirs(tmp)
+
     link = parse_latest_incident_link()
-    filename = link.split("/")[-1]
+    filename = tmp + "/" + link.split("/")[-1]
+
     r = requests.get(link)
 
     with open(filename, "wb") as f:

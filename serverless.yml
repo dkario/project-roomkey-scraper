@@ -5,9 +5,11 @@ service: get-latest-project-roomkey-data
 
 provider:
     name: aws
+    stage: prod
     runtime: python3.8
     region: us-west-1
     environment:
+        TMP: /tmp
         TWITTER_API_KEY: ${ssm:/TWITTER_API_KEY~true}
         TWITTER_API_SECRET: ${ssm:/TWITTER_API_SECRET~true}
         TWITTER_ACCESS_TOKEN: ${ssm:/TWITTER_ACCESS_TOKEN~true}
@@ -22,13 +24,14 @@ package:
         - "*.ipynb"
         - node_modules/**
         - source/table_parser/**
+        - tmp/**
         - venv/**
 
 functions:
     cron:
         handler: handler.run
         events:
-            - schedule: cron(0 20 ? * MON-FRI *)
+            - schedule: cron(0 3 ? * TUE-SAT *)
 
 plugins:
     - serverless-python-requirements

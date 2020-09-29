@@ -46,6 +46,8 @@ LOS ANGELES COUNTY
 {rooms_under_contract}-----Rooms under contract
 {rooms_operational}-----Rooms operational
 {rooms_occupied}-----Rooms occupied\
+
+projectroomkeytracker.com
     """.format(
         today=format_today(),
         **vars(daily_totals),

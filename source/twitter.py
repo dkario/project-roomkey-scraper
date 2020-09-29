@@ -1,6 +1,6 @@
 import os
 import tweepy
-from datetime import date
+from datetime import date, timedelta
 
 
 def get_api():
@@ -33,7 +33,8 @@ def send_reply(text, tweet_id):
 
 
 def format_today():
-    return date.today().strftime("%B %-d")
+    # Subtract 1 day because this will be run at 3am UTC, but the formatted date/time should be 8pm PT
+    return (date.today() - timedelta(days=1)).strftime("%B %-d")
 
 
 def format_daily_totals_tweet(daily_totals):
@@ -45,7 +46,7 @@ LOS ANGELES COUNTY
 {rooms_promised}----Rooms promised
 {rooms_under_contract}-----Rooms under contract
 {rooms_operational}-----Rooms operational
-{rooms_occupied}-----Rooms occupied\
+{rooms_occupied}-----Rooms occupied
 
 projectroomkeytracker.com
     """.format(

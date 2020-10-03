@@ -1,6 +1,7 @@
 import os
 import tweepy
-from datetime import date, timedelta
+
+from source.date_utils import today
 
 
 def get_api():
@@ -33,8 +34,7 @@ def send_reply(text, tweet_id):
 
 
 def format_today():
-    # Subtract 1 day because this will be run at 3am UTC, but the formatted date/time should be 8pm PT
-    return (date.today() - timedelta(days=1)).strftime("%B %-d")
+    return today().strftime("%B %-d")
 
 
 def format_daily_totals_tweet(daily_totals):

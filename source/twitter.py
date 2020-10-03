@@ -48,10 +48,13 @@ LOS ANGELES COUNTY
 {rooms_operational}-----Rooms operational
 {rooms_occupied}-----Rooms occupied
 
-projectroomkeytracker.com
-    """.format(
+projectroomkeytracker.com""".format(
         today=format_today(),
-        **vars(daily_totals),
+        unsheltered_people=f"{daily_totals.unsheltered_people:,}",
+        rooms_promised=f"{daily_totals.rooms_promised:,}",
+        rooms_under_contract=f"{daily_totals.rooms_under_contract:,}",
+        rooms_operational=f"{daily_totals.rooms_operational:,}",
+        rooms_occupied=f"{daily_totals.rooms_occupied:,}",
     )
 
 

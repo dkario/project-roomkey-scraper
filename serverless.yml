@@ -10,7 +10,7 @@ provider:
     timeout: 30
     region: us-west-1
     environment:
-        DAY_OFFSET: 1
+        DAY_OFFSET: "1"
         TMP: /tmp
         TWITTER_API_KEY: ${ssm:/TWITTER_API_KEY~true}
         TWITTER_API_SECRET: ${ssm:/TWITTER_API_SECRET~true}
@@ -25,11 +25,15 @@ package:
         - "*.pdf"
         - "*.png"
         - "*.ipynb"
+        - ".*ignore"
         - "package*.json"
         - node_modules/**
         - source/table_parser/**
         - tmp/**
         - venv/**
+        - Dockerfile
+        - docker-compose.yml
+        - google_credentials.json
 
 functions:
     cron:

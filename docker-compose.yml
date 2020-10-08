@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+    sls:
+        build: ./
+        image: serverless/docker:latest
+        environment:
+            - SERVERLESS_ACCESS_KEY=${SERVERLESS_ACCESS_KEY}
+        volumes:
+            - $HOME/.aws/credentials:/root/.aws/credentials:ro

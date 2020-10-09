@@ -5,7 +5,7 @@ service: get-latest-project-roomkey-data
 
 provider:
   name: aws
-  stage: dev
+  stage: ${opt:stage, "dev"}
   runtime: python3.8
   timeout: 30
   region: us-west-1
@@ -14,7 +14,12 @@ provider:
       Action:
         - ssm:GetParameter
       Resource:
-        - arn:aws:ssm:us-west-1:${ssm:/_AWS_ACCOUNT_ID~true}:parameter/GOOGLE_CREDENTIALS
+        Fn::Join:
+          - ":"
+          - - arn:aws:ssm
+            - Ref: AWS::Region
+            - Ref: AWS::AccountId
+            - parameter${self:custom.googleCredentialsSecretName}
   environment:
     DAY_OFFSET: "1"
     TMP: /tmp
@@ -22,6 +27,7 @@ provider:
     TWITTER_API_SECRET: ${ssm:/TWITTER_API_SECRET~true}
     TWITTER_ACCESS_TOKEN: ${ssm:/TWITTER_ACCESS_TOKEN~true}
     TWITTER_ACCESS_TOKEN_SECRET: ${ssm:/TWITTER_ACCESS_TOKEN_SECRET~true}
+    GOOGLE_CREDENTIALS: ${self:custom.googleCredentialsSecretName}
 
 package:
   include:
@@ -55,3 +61,4 @@ plugins:
 custom:
   pythonRequirements:
     layer: true
+  googleCredentialsSecretName: /PRT/${opt:stage, self:provider.stage, "dev"}/Google/ServiceAccountCredentials

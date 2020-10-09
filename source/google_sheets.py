@@ -28,10 +28,12 @@ def get_api():
 
 
 def get_google_account_credentials_secret():
+    secret_name = os.getenv("GOOGLE_CREDENTIALS")
+
     ssm = boto3.client("ssm")
-    secret = ssm.get_parameter(Name="GOOGLE_CREDENTIALS", WithDecryption=True)[
-        "Parameter"
-    ]["Value"]
+    secret = ssm.get_parameter(Name=secret_name, WithDecryption=True)["Parameter"][
+        "Value"
+    ]
 
     return json.loads(secret)
 

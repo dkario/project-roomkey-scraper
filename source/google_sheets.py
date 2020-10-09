@@ -21,20 +21,19 @@ def get_api():
             )
     else:
         credentials = Credentials.from_service_account_info(
-            json.loads(get_google_account_credentials_secret()), scopes=scopes
+            get_google_account_credentials_secret(), scopes=scopes
         )
 
     return gspread.authorize(credentials)
 
 
 def get_google_account_credentials_secret():
-    secret_name = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_SECRET_NAME")
-    region_name = "us-west-1"
+    ssm = boto3.client("ssm")
+    secret = ssm.get_parameter(Name="GOOGLE_CREDENTIALS", WithDecryption=True)[
+        "Parameter"
+    ]["Value"]
 
-    session = boto3.session.Session()
-    client = session.client(service_name="secretsmanager", region_name=region_name)
-
-    return client.get_secret_value(SecretId=secret_name)["SecretString"]
+    return json.loads(secret)
 
 
 def get_LAC_data_worksheet():

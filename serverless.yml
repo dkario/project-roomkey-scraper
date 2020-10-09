@@ -12,9 +12,9 @@ provider:
   iamRoleStatements:
     - Effect: "Allow"
       Action:
-        - "secretsmanager:GetSecretValue"
+        - ssm:GetParameter
       Resource:
-        - "arn:aws:secretsmanager:us-west-1:${ssm:/_AWS_ACCOUNT_ID~true}:secret:${ssm:/GOOGLE_APPLICATION_CREDENTIALS_SECRET_NAME~true}-VTM2ny"
+        - arn:aws:ssm:us-west-1:${ssm:/_AWS_ACCOUNT_ID~true}:parameter/GOOGLE_CREDENTIALS
   environment:
     DAY_OFFSET: "1"
     TMP: /tmp

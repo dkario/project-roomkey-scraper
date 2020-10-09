@@ -4,48 +4,54 @@ app: project-roomkey-scraper
 service: get-latest-project-roomkey-data
 
 provider:
-    name: aws
-    stage: prod
-    runtime: python3.8
-    timeout: 30
-    region: us-west-1
-    environment:
-        DAY_OFFSET: "1"
-        TMP: /tmp
-        TWITTER_API_KEY: ${ssm:/TWITTER_API_KEY~true}
-        TWITTER_API_SECRET: ${ssm:/TWITTER_API_SECRET~true}
-        TWITTER_ACCESS_TOKEN: ${ssm:/TWITTER_ACCESS_TOKEN~true}
-        TWITTER_ACCESS_TOKEN_SECRET: ${ssm:/TWITTER_ACCESS_TOKEN_SECRET~true}
+  name: aws
+  stage: dev
+  runtime: python3.8
+  timeout: 30
+  region: us-west-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "secretsmanager:GetSecretValue"
+      Resource:
+        - "arn:aws:secretsmanager:us-west-1:${ssm:/_AWS_ACCOUNT_ID~true}:secret:${ssm:/GOOGLE_APPLICATION_CREDENTIALS_SECRET_NAME~true}-VTM2ny"
+  environment:
+    DAY_OFFSET: "1"
+    TMP: /tmp
+    TWITTER_API_KEY: ${ssm:/TWITTER_API_KEY~true}
+    TWITTER_API_SECRET: ${ssm:/TWITTER_API_SECRET~true}
+    TWITTER_ACCESS_TOKEN: ${ssm:/TWITTER_ACCESS_TOKEN~true}
+    TWITTER_ACCESS_TOKEN_SECRET: ${ssm:/TWITTER_ACCESS_TOKEN_SECRET~true}
 
 package:
-    include:
-        - ./source
-    exclude:
-        - "*.csv"
-        - "*.pdf"
-        - "*.png"
-        - "*.ipynb"
-        - ".*ignore"
-        - "package*.json"
-        - node_modules/**
-        - source/table_parser/**
-        - tmp/**
-        - venv/**
-        - Dockerfile
-        - docker-compose.yml
-        - google_credentials.json
+  include:
+    - ./source
+  exclude:
+    - "*.csv"
+    - "*.pdf"
+    - "*.png"
+    - "*.ipynb"
+    - ".*ignore"
+    - "package*.json"
+    - node_modules/**
+    - source/table_parser/**
+    - tmp/**
+    - venv/**
+    - Dockerfile
+    - docker-compose.yml
+    - google_credentials.json
 
 functions:
-    cron:
-        handler: handler.run
-        events:
-            - schedule: cron(0 3 ? * TUE-SAT *)
-        layers:
-            - { Ref: PythonRequirementsLambdaLayer }
+  cron:
+    handler: handler.run
+    events:
+      - schedule: cron(0 3 ? * TUE-SAT *)
+    layers:
+      - { Ref: PythonRequirementsLambdaLayer }
 
 plugins:
-    - serverless-python-requirements
+  - serverless-python-requirements
 
 custom:
-    pythonRequirements:
-        layer: true
+  pythonRequirements:
+    layer: true

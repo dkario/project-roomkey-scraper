@@ -2,6 +2,7 @@ import os
 import tweepy
 
 from source.date_utils import today
+from tweepy import TweepError
 
 
 def get_api():
@@ -76,9 +77,17 @@ Report from {today}:
 
 
 def send_daily_totals_tweet_thread(daily_totals, page_range, latest_update_link):
-    daily_totals_tweet = send_tweet(format_daily_totals_tweet(daily_totals))
-    data_source_tweet = send_reply(
-        format_data_source_tweet(latest_update_link, page_range), daily_totals_tweet.id
-    )
+    try:
+        daily_totals_tweet = send_tweet(format_daily_totals_tweet(daily_totals))
+    except TweepError as e:
+        if e.args[0][0]["code"] == 187:  # Duplicate tweet
+            print("Already tweeted :)")
+        else:
+            raise e
+    else:
+        data_source_tweet = send_reply(
+            format_data_source_tweet(latest_update_link, page_range),
+            daily_totals_tweet.id,
+        )
 
-    return daily_totals_tweet
+        return daily_totals_tweet

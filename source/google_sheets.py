@@ -1,46 +1,26 @@
 import gspread
-import json
-import os
-import boto3
-import base64
 
-from botocore.exceptions import ClientError
 from dotenv import load_dotenv
 from google.oauth2.service_account import Credentials
 from source.daily_totals import DailyTotals
 from source.date_utils import get_days_ago, is_monday, today
+from source.get_secret import get_secret
 
 
 def get_api():
     scopes = ["https://www.googleapis.com/auth/spreadsheets"]
 
-    if os.getenv("ENVIRONMENT") == "dev":
-        with open("./google_credentials.json", "r") as credentials_file:
-            credentials = Credentials.from_service_account_info(
-                json.load(credentials_file), scopes=scopes
-            )
-    else:
-        credentials = Credentials.from_service_account_info(
-            get_google_account_credentials_secret(), scopes=scopes
-        )
+    credentials = Credentials.from_service_account_info(
+        get_secret("GOOGLE_CREDENTIALS", is_json=True), scopes=scopes
+    )
 
     return gspread.authorize(credentials)
 
 
-def get_google_account_credentials_secret():
-    secret_name = os.getenv("GOOGLE_CREDENTIALS")
-
-    ssm = boto3.client("ssm")
-    secret = ssm.get_parameter(Name=secret_name, WithDecryption=True)["Parameter"][
-        "Value"
-    ]
-
-    return json.loads(secret)
-
-
 def get_LAC_data_worksheet():
     gc = get_api()
-    sheet = gc.open_by_key(os.getenv("GOOGLE_SHEET_ID"))
+    sheet = gc.open_by_key(get_secret("GOOGLE_SHEET_ID"))
+
     return sheet.get_worksheet(0)  # "LAC Data"
 
 

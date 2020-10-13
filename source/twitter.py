@@ -1,16 +1,16 @@
-import os
 import tweepy
 
 from source.date_utils import today
+from source.get_secret import get_secret
 from tweepy import TweepError
 
 
 def get_api():
     auth = tweepy.OAuthHandler(
-        os.getenv("TWITTER_API_KEY"), os.getenv("TWITTER_API_SECRET")
+        get_secret("TWITTER_API_KEY"), get_secret("TWITTER_API_SECRET")
     )
     auth.set_access_token(
-        os.getenv("TWITTER_ACCESS_TOKEN"), os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
+        get_secret("TWITTER_ACCESS_TOKEN"), get_secret("TWITTER_ACCESS_TOKEN_SECRET")
     )
     api = tweepy.API(auth)
     api.verify_credentials()

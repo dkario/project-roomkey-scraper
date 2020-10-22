@@ -6,7 +6,7 @@ service: get-latest-project-roomkey-data
 provider:
   name: aws
   stage: ${opt:stage, "dev"}
-  runtime: python3.8
+  runtime: python3.7
   timeout: 30
   region: us-west-1
   iamRoleStatements:
@@ -53,6 +53,8 @@ provider:
   environment:
     DAY_OFFSET: "1"
     TMP: /tmp
+    CHROMEDRIVER: /opt/chromedriver
+    HEADLESS_CHROMIUM: /opt/headless-chromium
     TWITTER_API_KEY: ${self:custom.secretNames.twitterApiKey}
     TWITTER_API_SECRET: ${self:custom.secretNames.twitterApiSecret}
     TWITTER_ACCESS_TOKEN: ${self:custom.secretNames.twitterAccessToken}
@@ -72,6 +74,7 @@ package:
     - "package*.json"
     - node_modules/**
     - source/table_parser/**
+    - chrome/**
     - tmp/**
     - venv/**
     - Dockerfile
@@ -83,7 +86,9 @@ functions:
     events:
       - schedule: cron(0 3 ? * TUE-SAT *)
     layers:
+      - ${cf:chrome-layer-prod.ChromeLayerExport}
       - { Ref: PythonRequirementsLambdaLayer }
+    package: {}
 
 plugins:
   - serverless-python-requirements

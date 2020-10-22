@@ -1,0 +1,21 @@
+org: drkario
+app: project-roomkey-scraper
+
+service: chrome-layer
+
+provider:
+  name: aws
+  stage: prod
+  region: us-west-1
+
+layers:
+  chrome:
+    path: layer
+
+resources:
+  Outputs:
+    ChromeLayerExport:
+      Value:
+        Ref: ChromeLambdaLayer
+      Export:
+        Name: ChromeLambdaLayer

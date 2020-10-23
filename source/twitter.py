@@ -2,6 +2,7 @@ import tweepy
 
 from source.date_utils import today
 from source.get_secret import get_secret
+from source.screenshot import get_screenshot_path, screenshot_was_saved_successfully
 from tweepy import TweepError
 
 
@@ -18,9 +19,16 @@ def get_api():
     return api
 
 
-def send_tweet(text):
+def send_first_tweet_textonly_fallback(text):
     api = get_api()
     tweet = api.update_status(text)
+
+    return tweet
+
+
+def send_first_tweet_with_screenshot(text, screenshot_path):
+    api = get_api()
+    tweet = api.update_with_media(screenshot_path, text)
 
     return tweet
 
@@ -78,7 +86,15 @@ Report from {today}:
 
 def send_daily_totals_tweet_thread(daily_totals, page_range, latest_update_link):
     try:
-        daily_totals_tweet = send_tweet(format_daily_totals_tweet(daily_totals))
+        if screenshot_was_saved_successfully():
+            daily_totals_tweet = send_first_tweet_with_screenshot(
+                format_daily_totals_tweet(daily_totals), get_screenshot_path()
+            )
+        else:
+            daily_totals_tweet = send_first_tweet_textonly_fallback(
+                format_daily_totals_tweet(daily_totals)
+            )
+
     except TweepError as e:
         if e.args[0][0]["code"] == 187:  # Duplicate tweet
             print("Already tweeted :)")

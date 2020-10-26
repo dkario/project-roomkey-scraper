@@ -35,8 +35,12 @@ def copy_last_friday_values_through_weekend():
     saturday = format_date(get_days_ago(2))
     sunday = format_date(get_days_ago(1))
 
-    worksheet.append_row([saturday] + last_row_without_date)
-    worksheet.append_row([sunday] + last_row_without_date)
+    worksheet.append_row(
+        [saturday] + last_row_without_date, value_input_option="USER_ENTERED"
+    )
+    worksheet.append_row(
+        [sunday] + last_row_without_date, value_input_option="USER_ENTERED"
+    )
 
 
 def append_daily_totals(daily_totals):
@@ -48,7 +52,8 @@ def append_daily_totals(daily_totals):
             daily_totals.rooms_operational,
             daily_totals.rooms_occupied,
             daily_totals.people_in_rooms,
-        ]
+        ],
+        value_input_option="USER_ENTERED",
     )
 
 
